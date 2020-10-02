@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class WordReducer extends Reducer<Text, NullWritable, Text, NullWritable> {
 
     private int max = Integer.MIN_VALUE;
-    private final ArrayList<Text> words = new ArrayList<>();
+    private final ArrayList<Text> longestWords = new ArrayList<>();
 
     /**
      * Reduce method for MapReduce process. Accumulate words with currently detected maximum word length
@@ -28,15 +28,15 @@ public class WordReducer extends Reducer<Text, NullWritable, Text, NullWritable>
         int length = key.getLength();
         if(length > max) {
             max = length;
-            words.clear();
+            longestWords.clear();
         }
         if(length == max) {
-            words.add(new Text(key));
+            longestWords.add(new Text(key));
         }
     }
 
     /**
-     * Cleanup method for MapReduce process, called after reduce step is done
+     * Cleanup method for MapReduce process, which write all longest words into context
      * @param context MapReduce job context
      * @throws IOException Thrown by context.write
      * @throws InterruptedException Thrown by context.write
@@ -44,8 +44,8 @@ public class WordReducer extends Reducer<Text, NullWritable, Text, NullWritable>
     @Override
     public void cleanup(Context context) throws IOException, InterruptedException
     {
-        for(Text val : words) {
-            context.write(val, NullWritable.get());
+        for(Text word : longestWords) {
+            context.write(word, NullWritable.get());
         }
     }
 }
