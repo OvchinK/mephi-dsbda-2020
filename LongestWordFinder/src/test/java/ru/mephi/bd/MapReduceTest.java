@@ -33,7 +33,7 @@ public class MapReduceTest {
     public void testMapper() throws IOException {
         mapDriver
                 .withInput(new LongWritable(), new Text("pride-blinded challenging хоррорсоми"))
-                .withInput(new LongWritable(), new Text("cunoniaceous ундирпиир reprograming"))
+                .withInput(new LongWritable(), new Text("cunoniaceous reprograming"))
                 .withOutput(new Text("pride-blinded"), NullWritable.get())
                 .withOutput(new Text("challenging"), NullWritable.get())
                 .withOutput(new Text("cunoniaceous"), NullWritable.get())

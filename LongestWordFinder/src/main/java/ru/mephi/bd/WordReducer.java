@@ -24,22 +24,19 @@ public class WordReducer extends Reducer<Text, NullWritable, Text, NullWritable>
      * @param context MapReduce job context, unused
      */
     @Override
-    protected void reduce(Text key, Iterable<NullWritable> value, Context context) throws IOException, InterruptedException {
-        int len =  key.getLength();
-        if(len > max) {
-            //If word is longer than currently detected longest word, set max length to this word's length and
-            // clear accumulated words
-            max = len;
+    protected void reduce(Text key, Iterable<NullWritable> value, Context context) {
+        int length = key.getLength();
+        if(length > max) {
+            max = length;
             words.clear();
         }
-        if(len == max) {
-            //If word has the same length as currently detected longest word, add it to accumulating container
+        if(length == max) {
             words.add(new Text(key));
         }
     }
 
     /**
-     * Cleanup method for MapReduce process, called on each reducer/combiner node after reduce/combine step is done
+     * Cleanup method for MapReduce process, called after reduce step is done
      * @param context MapReduce job context
      * @throws IOException Thrown by context.write
      * @throws InterruptedException Thrown by context.write

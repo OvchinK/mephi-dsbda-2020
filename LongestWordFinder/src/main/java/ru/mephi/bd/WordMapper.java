@@ -11,11 +11,11 @@ import java.util.StringTokenizer;
 /**
  * Mapper class
  *
- * Splits inputted text into words, filters out malformed words and maps as keys to help reducer avoid duplicates
+ * Splits inputted text into words, filters out malformed words and maps as keys
  */
 public class WordMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
 
-    private static final String delimiters = " !\"#$%&()*+,./:;<=>[\\]^_~\n\t\r";
+    private static final String delimiters = " !\"#$%&()*+,./:;<=>[\\]^~\n\t\r";
 
     /**
      * Map method for MapReduce process. Splits provided text by delimiters,
@@ -29,11 +29,8 @@ public class WordMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
         StringTokenizer itr = new StringTokenizer(value.toString(), delimiters);
         while (itr.hasMoreTokens())
         {
-            //Get next word
             String str = itr.nextToken();
-            //Check if word is well formed
             if(str.matches("\\p{ASCII}*")) {
-                //If word is well formed, write it to context
                 context.write(new Text(str), NullWritable.get());
             }
         }

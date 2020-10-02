@@ -17,9 +17,8 @@ public class MapReduceApplication {
         if (args.length < 2) {
             throw new RuntimeException("You should specify input and output folders!");
         }
-        Configuration conf = new Configuration();
 
-        conf.set("mapred.map.output.compression.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+        Configuration conf = new Configuration();
 
         Job job = Job.getInstance(conf, "longest word");
         job.setJarByClass(MapReduceApplication.class);
@@ -31,6 +30,7 @@ public class MapReduceApplication {
 
         SequenceFileOutputFormat.setOutputCompressionType(job, SequenceFile.CompressionType.BLOCK);
         SequenceFileOutputFormat.setCompressOutput(job, true);
+        SequenceFileOutputFormat.setOutputCompressorClass(job, org.apache.hadoop.io.compress.SnappyCodec.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
